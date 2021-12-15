@@ -6,6 +6,7 @@ const templateFooter = document.getElementById('template-footer').content
 const templateCarrito = document.getElementById('template-carrito').content
 const fragment = document.createDocumentFragment()
 let carrito = {}
+let totalFinal = 0
 
 //Events
 //El evento DOMContentLoaded es disparado cuando el documento HTML ha sido completamente cargado y parseado
@@ -24,7 +25,8 @@ const fetchData = async () => {
 const pintarCards = data => {
     let position = 1;
     data.forEach(item => {
-        templateCard.querySelector('h5').textContent = item.name
+        templateCard.querySelector('#card-name').textContent = item.name
+        templateCard.querySelector('#card-name-m').textContent = item.name
         templateCard.querySelector('#price').setAttribute('value', item.price)
         templateCard.querySelector('img').setAttribute('src', item.imageUrl)
         templateCard.querySelector('button').dataset.id = position
@@ -54,7 +56,6 @@ const setCarrito = item => {
         producto.cantidad =  carrito[producto.id].cantidad + parseInt(item.querySelector('#quantity').value)
     }
     carrito[producto.id] = { ...producto } //copia de carrito
-    console.log(carrito);
     pintarCarrito()
 }
 
@@ -89,7 +90,7 @@ const pintarFooter = () => {
     // sumar cantidad y sumar totales
     const nCantidad = Object.values(carrito).reduce((acc, { cantidad }) => acc + cantidad, 0)
     const nPrecio = Object.values(carrito).reduce((acc, {cantidad, precio}) => acc + cantidad * precio ,0)
-    // console.log(nPrecio)
+    totalFinal = nPrecio
 
     templateFooter.querySelectorAll('td')[0].textContent = nCantidad
     templateFooter.querySelector('span').textContent = nPrecio
@@ -101,34 +102,36 @@ const pintarFooter = () => {
 
     const boton = document.querySelector('#vaciar-carrito')
     boton.addEventListener('click', () => {
-        carrito[1]
-        console.log(carrito[1])
-        printJS({printable:carrito[1],properties:['title', 'precio', 'cantidad'],type:'json'})
-    })
-
-}
-
-
-const btnAumentarDisminuir = e => {
-    // console.log(e.target.classList.contains('btn-info'))
-    if (e.target.classList.contains('btn-info')) {
-        const producto = carrito[e.target.dataset.id]
-        producto.cantidad++
-        carrito[e.target.dataset.id] = { ...producto }
-        pintarCarrito()
-    }
-
-    if (e.target.classList.contains('btn-danger')) {
-        const producto = carrito[e.target.dataset.id]
-        producto.cantidad--
-        if (producto.cantidad === 0) {
-            delete carrito[e.target.dataset.id]
-        } else {
-            carrito[e.target.dataset.id] = {...producto}
+        let cartList = []
+        const cartKeys = Object.keys(carrito) //extrar un array con los nombres de los atributos
+        
+        for(let i = 0; i<cartKeys.length; i++){
+            const total = carrito[cartKeys[i]].cantidad * carrito[cartKeys[i]].precio
+            cartList.push({...carrito[cartKeys[i]], 'total':'$'+total}) //añade el elemento del carrito mas su total
         }
-        pintarCarrito()
-    }
-    e.stopPropagation()
+
+        printJS({
+            printable:cartList,
+            type:'json',
+            properties:[
+                {field:'title', displayName:'Producto'}, 
+                {field:'cantidad', displayName:'Cantidad'}, 
+                {field:'precio', displayName:'Precio unitario'}, 
+                {field:'total', displayName:'Precio total'},
+            ],
+            gridHeaderStyle: 'border: 2px solid #3971A5;',
+	        gridStyle: 'border: 2px solid #3971A5;',
+            font:"Courier New",
+            header: `
+            <h3 class="fontConsole">Quiroga Ladrillos - Presupuesto</h3> 
+            <br> 
+            <h3 class="fontConsole">Precio total final: $${totalFinal}</h3>
+            `,
+            style: `@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap');
+            .fontConsole { font-family: "Lucida Console", "Courier New", monospace; }`,
+            font: 'Lucida Console'
+        })
+    })
 }
 
 const btnBorrar = e => {

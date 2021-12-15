@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="title col-12">
                         <h5 class="mbr-section-title mbr-fonts-style mb-3 display-2">
-                            <strong>Presupuesto</strong><strong><br></strong>
+                            <strong>Añade un producto para empezar a armar tu presupuesto</strong><strong><br></strong>
                         </h5>
                     </div>
 
@@ -145,7 +145,12 @@
             <div class="card">
                 <img src="" alt="" class="car-img-top">
                 <div class="card-body">
-                <h5 class="mbr-section-title display-4">Titulo</h5>
+                <div class="d-none d-sm-none d-md-block">
+                    <h5 id="card-name" class="mbr-section-title display-4">Titulo</h5>
+                </div>
+                <div class="d-block d-sm-block d-md-none">
+                    <h5 id="card-name-m"class="mbr-section-title display-2">Titulo</h5>
+                </div>
                 <div class="input-group mbr-text input-group-sm mb-2">
                     <span class="input-group-text display-7">Precio x unidad</span>
                     <input id="price" type="number" class="form-control" value="0" disabled>
@@ -187,7 +192,7 @@
         <template id="template-footer">
         <th class="display-7" scope="row" colspan="2">Total de los productos</th>
         <td class="display-7">10</td>
-        <td>
+        <td class="">
             <a id="vaciar-carrito" class="btn btn-danger display-7" onclick="">
                 <svg id="print-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
                     <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
