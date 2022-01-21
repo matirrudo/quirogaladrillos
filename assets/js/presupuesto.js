@@ -16,7 +16,7 @@ items.addEventListener('click', e => { btnBorrar(e) })
 
 // Traer products
 const fetchData = async () => {
-    const res = await fetch('https://api.alfadev.com.ar/products');
+    const res = await fetch('https://api.quirogaladrillos.com.ar/products');
     const data = await res.json()
     pintarCards(data)
 }

@@ -5,7 +5,7 @@ const fragment = document.createDocumentFragment()
 document.addEventListener('DOMContentLoaded', e => { fetchData() });
 
 const fetchData = async () => {
-    const res = await fetch('https://api.alfadev.com.ar/products')
+    const res = await fetch('https://api.quirogaladrillos.com.ar/products')
     const data = await res.json()
     paintCard(data)
 }
